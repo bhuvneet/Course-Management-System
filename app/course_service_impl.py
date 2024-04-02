@@ -85,9 +85,10 @@ class CourseServiceImpl(CourseService):
     # this method is called get the avg of an assignment
     def get_assignment_grade_avg(self, course_id, assignment_id) -> int:
         # calculate avg of grades of an assignment by course ID
-        if course_id in self.grades and assignment_id in self.grades:
+        if course_id in self.grades and assignment_id in self.grades[course_id]:
             student_grades = self.grades[course_id][assignment_id].values()
-            return sum(student_grades) // len(student_grades) if student_grades else 0
+            if student_grades:
+                return sum(student_grades) // len(student_grades) if student_grades else 0
         return 0
     
     # this method is called to get grade avg of students
