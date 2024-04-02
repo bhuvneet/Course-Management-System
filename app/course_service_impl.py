@@ -65,9 +65,8 @@ class CourseServiceImpl(CourseService):
     
     def get_assignment_grade_avg(self, course_id, assignment_id) -> int:
         if course_id in self.grades and assignment_id in self.grades:
-            grades = [self.grades[course_id][assignment_id].values()
-                for assignment_id in self.grades[course_id]]
-            return sum(grades) // len(grades) if grades else 0
+            student_grades = self.grades[course_id][assignment_id].values()
+            return sum(student_grades) // len(student_grades) if student_grades else 0
         return 0
     
     def get_student_grade_avg(self, course_id, student_id) -> int:
@@ -92,8 +91,31 @@ class CourseServiceImpl(CourseService):
 # for testing
 course_service = CourseServiceImpl()
 
+course_id = course_service.create_course("Python Programming")
+print("Course ID: ", course_id)
+
+# enroll a student
+student_id = 1
+course_service.enroll_student(course_id, student_id)
+
+# create asssignment
+assignment_id = course_service.create_assignment(course_id, "Assignment 1")
+
+# submit assignment
+grade = 85
+course_service.submit_assignment(course_id, student_id, assignment_id, grade)
+
+# get assignment grade avg
+assignment_avg_grade = course_service.get_assignment_grade_avg(course_id, assignment_id)
+print("Average grade for assignment 1: ", assignment_avg_grade)
+
+# get courses list
 course_list = course_service.get_courses()
 print("Course list: ", course_list)
+
+# get top 5 students
+top_five_students = course_service.get_top_five_students(course_id)
+print("Top five students in th course: ", top_five_students)
     
     
     
